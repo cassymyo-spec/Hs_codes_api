@@ -62,7 +62,7 @@ def _parse_csv(text: str) -> list[dict]:
 
 
 def _build_objects(rows, hs_code_file):
-    from .models import Category
+    from app.models import Category
 
     objects = []
     skipped_blank = 0
