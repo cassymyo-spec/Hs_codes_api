@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-# from django.contrib.postgres.indexes import GinIndex
-# from django.contrib.postgres.operations import TrigramExtension
+from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.operations import TrigramExtension
 
 
 class User(AbstractUser):
@@ -31,17 +31,19 @@ class HsCode(models.Model):
             models.UniqueConstraint(fields=["hs_code"], name="unique_hs_code")
         ]
 
-
-# class Meta:
-#     indexes = [
-#         GinIndex(
-#             fields=["hs_code"],
-#             opclasses=["gin_trgm_ops"],
-#             name="hscode_hs_code_trgm_idx"
-#         ),
-#         GinIndex(
-#             fields=["description"],
-#             opclasses=["gin_trgm_ops"],
-#             name="hscode_description_trgm_idx"
-#         ),
-#     ]
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["hs_code"], name="unique_hs_code")
+        ]
+        indexes = [
+            GinIndex(
+                fields=["hs_code"],
+                opclasses=["gin_trgm_ops"],
+                name="hscode_hs_code_trgm_idx",
+            ),
+            GinIndex(
+                fields=["description"],
+                opclasses=["gin_trgm_ops"],
+                name="hscode_description_trgm_idx",
+            ),
+        ]
