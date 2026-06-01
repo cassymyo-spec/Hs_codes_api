@@ -1,0 +1,15 @@
+2026-06-01 15:25:18.444 CAT [15141] LOG:  starting PostgreSQL 18.2 on aarch64-unknown-linux-android, compiled by Android (13989888, +pgo, +bolt, +lto, +mlgo, based on r563880c) clang version 21.0.0 (https://android.googlesource.com/toolchain/llvm-project 5e96669f06077099aa41290cdb4c5e6fa0f59349), 64-bit
+2026-06-01 15:25:18.445 CAT [15141] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-06-01 15:25:18.446 CAT [15141] LOG:  listening on Unix socket "/data/data/com.termux/files/usr/tmp/.s.PGSQL.5432"
+2026-06-01 15:25:18.468 CAT [15149] LOG:  database system was shut down at 2026-06-01 15:24:53 CAT
+2026-06-01 15:25:18.497 CAT [15141] LOG:  database system is ready to accept connections
+2026-06-01 15:26:48.604 CAT [15454] ERROR:  database "hsdb" already exists
+2026-06-01 15:26:48.604 CAT [15454] STATEMENT:  CREATE DATABASE hsdb OWNER hsuser;
+2026-06-01 15:27:05.786 CAT [15147] LOG:  checkpoint starting: immediate force wait
+2026-06-01 15:27:05.979 CAT [15147] LOG:  checkpoint complete: wrote 52 buffers (0.3%), wrote 3 SLRU buffers; 1 WAL file(s) added, 0 removed, 0 recycled; write=0.022 s, sync=0.008 s, total=0.193 s; sync files=21, longest=0.001 s, average=0.001 s; distance=4745 kB, estimate=4745 kB; lsn=0/1C06188, redo lsn=0/1C06130
+2026-06-01 15:27:12.309 CAT [15573] ERROR:  role "hsuser" already exists
+2026-06-01 15:27:12.309 CAT [15573] STATEMENT:  CREATE USER hsuser WITH PASSWORD 'hspass';
+2026-06-01 15:32:06.078 CAT [15147] LOG:  checkpoint starting: time
+2026-06-01 15:33:46.511 CAT [15147] LOG:  checkpoint complete: wrote 991 buffers (6.0%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 1 recycled; write=100.306 s, sync=0.084 s, total=100.433 s; sync files=310, longest=0.004 s, average=0.001 s; distance=4696 kB, estimate=4740 kB; lsn=0/209C228, redo lsn=0/209C198
+2026-06-01 15:42:06.686 CAT [15147] LOG:  checkpoint starting: time
+2026-06-01 15:42:22.571 CAT [15147] LOG:  checkpoint complete: wrote 157 buffers (1.0%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=15.837 s, sync=0.015 s, total=15.886 s; sync files=122, longest=0.005 s, average=0.001 s; distance=941 kB, estimate=4360 kB; lsn=0/2193BC8, redo lsn=0/2187958
