@@ -16,6 +16,7 @@ from rest_framework.views import APIView
 from .permissions import IsAdminOrStaff
 from .serializers import HsCodeUploadSerializer, HsCodeSerializer
 from .services.file_upload_service import process_hs_code_csv
+from loguru import logger
 
 
 class HsCodeUploadView(APIView):
@@ -32,6 +33,7 @@ class HsCodeUploadView(APIView):
                 uploaded_file=serializer.validated_data["file"]
             )
         except ValueError as exc:
+            logger.error("Failed to process file:{}", str(exc))
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(asdict(result), status=status.HTTP_201_CREATED)
@@ -41,24 +43,51 @@ class HsCodeSearchView(generics.ListAPIView):
     serializer_class = HsCodeSerializer
 
     def get_queryset(self):
-        q = self.request.query_params.get("q")
+        try:
+            q = self.request.query_params.get("q")
 
-        if not q:
-            raise ValidationError({"q": ["This query parameter is required."]})
-
-        threshold = getattr(
-            settings,
-            "HS_CODE_SEARCH_THRESHOLD",
-            0.1,
-        )
-
-        return (
-            HsCode.objects.annotate(
-                similarity=(
-                    TrigramSimilarity("description", q) * 2
-                    + TrigramSimilarity("hs_code", q)
+            if not q:
+                logger.warning(
+                    "Missing search query | path={path}",
+                    path=self.request.path,
                 )
+                raise ValidationError({"q": ["This query parameter is required."]})
+
+            threshold = getattr(
+                settings,
+                "HS_CODE_SEARCH_THRESHOLD",
+                0.1,
             )
-            .filter(similarity__gte=threshold)
-            .order_by("-similarity")
-        )
+
+            logger.info(
+                "HS search executed | query={q} | threshold={threshold}",
+                q=q,
+                threshold=threshold,
+            )
+
+            queryset = (
+                HsCode.objects.annotate(
+                    similarity=(
+                        TrigramSimilarity("description", q) * 2
+                        + TrigramSimilarity("hs_code", q)
+                    )
+                )
+                .filter(similarity__gte=threshold)
+                .order_by("-similarity")
+            )
+
+            logger.info(
+                "HS search completed | query={q} | results={count}",
+                q=q,
+                count=queryset.count(),
+            )
+
+            return queryset
+
+        except Exception as e:
+            logger.exception(
+                "HS search failed | query={q} | error={error}",
+                q=self.request.query_params.get("q"),
+                error=str(e),
+            )
+            raise

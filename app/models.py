@@ -21,7 +21,6 @@ class HsCodeFile(models.Model):
 
 class HsCode(models.Model):
     hs_code_file = models.ForeignKey(HsCodeFile, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     hs_code = models.CharField(max_length=20)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
