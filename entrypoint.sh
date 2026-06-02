@@ -6,5 +6,5 @@ echo "Running migrations..."
 python manage.py migrate --noinput
 
 echo "Starting Gunicorn..."
-exec gunicorn config.wsgi:application \
+exec gunicorn core.wsgi:application \
     --config gunicorn.conf.py
