@@ -1,6 +1,7 @@
 # HS Codes API
 
 ![CI](https://github.com/DigitalTouchCode/Hs_codes_api/actions/workflows/ci.yml/badge.svg)
+![Deploy](https://github.com/DigitalTouchCode/Hs_codes_api/actions/workflows/deploy.yml/badge.svg)
 ![Python](https://img.shields.io/badge/python-3.12-blue.svg)
 ![Django](https://img.shields.io/badge/django-6.0-092E20?logo=django)
 ![PostgreSQL](https://img.shields.io/badge/postgresql-16-336791?logo=postgresql)
