@@ -22,19 +22,14 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             set -e
-            cd Hs_codes_api
+            cd /Hs_codes_api
 
             echo "Pulling latest code..."
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
 
             echo "Building and starting containers..."
             docker compose up -d --build
-
-            echo "Waiting for application to start..."
-            sleep 15
-
-            echo "Running migrations..."
-            docker compose exec -T web python manage.py migrate --noinput
 
             echo "Checking health endpoint..."
             for i in $(seq 1 20); do
@@ -42,7 +37,7 @@ jobs:
                 echo "Health check passed"
                 exit 0
               fi
-              echo "Attempt $i/20 â€” waiting..."
+              echo "Attempt $i/20 - waiting..."
               sleep 5
             done
 
