@@ -21,7 +21,7 @@ from loguru import logger
 
 class HsCodeUploadView(APIView):
     parser_classes = [MultiPartParser]
-    # permission_classes = [IsAdminOrStaff]
+    permission_classes = [IsAdminOrStaff]
 
     def post(self, request):
         serializer = HsCodeUploadSerializer(data=request.data)
@@ -75,15 +75,6 @@ class HsCodeSearchView(generics.ListAPIView):
                 .filter(similarity__gte=threshold)
                 .order_by("-similarity")
             )
-
-            logger.info(
-                "HS search completed | query={q} | results={count}",
-                q=q,
-                count=queryset.count(),
-            )
-            
-            logger.info(queryset)
-
             return queryset
 
         except Exception as e:

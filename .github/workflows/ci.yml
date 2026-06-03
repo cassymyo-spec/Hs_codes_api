@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: hsdb_test
+          POSTGRES_USER: hsuser
+          POSTGRES_PASSWORD: hspass
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U hsuser -d hsdb_test"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      SECRET_KEY: ci-secret-key-not-used-in-prod
+      DEBUG: "True"
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      DATABASE_URL: postgres://hsuser:hspass@localhost:5432/hsdb_test
+      DJANGO_SETTINGS_MODULE: core.settings.development
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Enable pg_trgm extension
+        run: psql postgres://hsuser:hspass@localhost:5432/hsdb_test -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
+
+      - name: Run migrations
+        run: python manage.py migrate --noinput
+
+      - name: Run tests
+        run: python manage.py test app --verbosity=2

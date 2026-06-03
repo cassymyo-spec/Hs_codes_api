@@ -18,17 +18,20 @@ class UploadResult:
 def process_hs_code_csv(uploaded_file) -> UploadResult:
     text = _decode_file(uploaded_file)
     rows = _parse_csv(text)
-    
-    print(text)
 
     hs_code_file = HsCodeFile.objects.create(hs_code_file=uploaded_file)
     objects, skipped_blank = _build_objects(rows, hs_code_file)
 
-    created_objects = HsCode.objects.bulk_create(objects, ignore_conflicts=True)
+    incoming_codes = [obj.hs_code for obj in objects]
+    existing_count = HsCode.objects.filter(hs_code__in=incoming_codes).count()
+
+    HsCode.objects.bulk_create(objects, ignore_conflicts=True)
+
+    created = len(objects) - existing_count
 
     return UploadResult(
-        created=len(created_objects),
-        skipped_duplicates=len(objects) - len(created_objects),
+        created=created,
+        skipped_duplicates=existing_count,
         skipped_blank_rows=skipped_blank,
         total_rows=len(rows),
         hs_code_file_id=hs_code_file.pk,

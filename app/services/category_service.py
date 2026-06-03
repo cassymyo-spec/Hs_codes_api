@@ -103,7 +103,7 @@ HS_CHAPTER_CATEGORIES = {
 
 def get_or_create_category_for_hs_code(hs_code: str) -> "Category":
     """Derive category from HS code chapter prefix and get or create it."""
-    from .models import Category
+    from app.models import Category
 
     chapter = hs_code[:2]
     name = HS_CHAPTER_CATEGORIES.get(chapter, f"Chapter {chapter}")

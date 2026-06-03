@@ -24,7 +24,8 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-RUN groupadd -r appuser && useradd -r -g appuser appuser
+RUN groupadd -r appuser && \
+    useradd -r -g appuser -m -d /home/appuser appuser
 
 COPY --from=builder /install /usr/local
 

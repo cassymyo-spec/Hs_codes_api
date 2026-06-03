@@ -8,7 +8,5 @@ urlpatterns = [
         name="hs-code-search",
     ),
     path("hs-codes/upload/", HsCodeUploadView.as_view(), name="hscode-upload"),
-    path("health/",
-    HealthCheckView.as_view(),
-    name="health")
+    path("health/", HealthCheckView.as_view(), name="health"),
 ]
