@@ -21,7 +21,7 @@ from loguru import logger
 
 class HsCodeUploadView(APIView):
     parser_classes = [MultiPartParser]
-    # permission_classes = [IsAdminOrStaff]
+    permission_classes = [IsAdminOrStaff]
 
     def post(self, request):
         serializer = HsCodeUploadSerializer(data=request.data)
