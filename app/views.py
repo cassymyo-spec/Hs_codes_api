@@ -75,15 +75,6 @@ class HsCodeSearchView(generics.ListAPIView):
                 .filter(similarity__gte=threshold)
                 .order_by("-similarity")
             )
-
-            logger.info(
-                "HS search completed | query={q} | results={count}",
-                q=q,
-                count=queryset.count(),
-            )
-            
-            logger.info(queryset)
-
             return queryset
 
         except Exception as e:
